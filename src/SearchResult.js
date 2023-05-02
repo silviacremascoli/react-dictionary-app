@@ -3,18 +3,18 @@ import Meanings from "./Meanings";
 import Phonetics from "./Phonetics";
 
 export default function SearchResult(props) {
-  if (props.definition) {
+  if (props.data) {
     return (
       <div className="SearchResult text-center">
-        <h2>{props.definition.word}</h2>
-        {props.definition.phonetics.map(function (phonetics, index) {
+        <h2>{props.data.word}</h2>
+        {props.data.phonetics.map(function (phonetics, index) {
           return (
             <div key={index}>
               <Phonetics phonetics={phonetics} />
             </div>
           );
         })}
-        {props.definition.meanings.map(function (meaning, index) {
+        {props.data.meanings.map(function (meaning, index) {
           return (
             <div key={index}>
               <Meanings meanings={meaning} />

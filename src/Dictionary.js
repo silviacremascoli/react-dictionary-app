@@ -4,11 +4,11 @@ import "./Dictionary.css";
 import SearchResult from "./SearchResult";
 
 export default function Dictionary() {
-  let [keyword, setKeyword] = useState(null);
-  let [definition, setDefinition] = useState(null);
+  let [keyword, setKeyword] = useState("");
+  let [data, setData] = useState(null);
 
   function handleResponse(response) {
-    setDefinition(response.data[0]);
+    setData(response.data[0]);
   }
 
   function Search(event) {
@@ -32,7 +32,7 @@ export default function Dictionary() {
           onChange={getKeyword}
         />
       </form>
-      <SearchResult definition={definition} />
+      <SearchResult data={data} />
     </div>
   );
 }

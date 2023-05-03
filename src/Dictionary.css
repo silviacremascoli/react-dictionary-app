@@ -3,7 +3,7 @@
   border-radius: 10px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 30px;
-  margin: 20px 120px;
+  margin: 20px;
 }
 
 .Dictionary h2 {
@@ -26,7 +26,7 @@
   text-align: center;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 576px) {
   .Dictionary section {
     margin: 20px 10px;
   }

@@ -1,17 +1,21 @@
 .Synonyms li {
   display: inline-block;
   list-style: none;
-  padding-right: 10px;
-  line-height: 1;
+  padding: 0 10px 0 5px;
+  font-size: 14px;
+}
+
+.Synonyms ul {
+  padding: 0;
+  margin: 0;
+}
+
+.Synonyms .see-also {
+  font-weight: bold;
   font-size: 14px;
 }
 
 .Synonyms {
-  padding: 0;
-  margin: 10px 0;
-}
-
-.Synonyms p {
-  display: inline;
-  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 5px;
 }

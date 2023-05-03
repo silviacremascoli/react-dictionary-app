@@ -4,7 +4,7 @@ import Example from "./Example";
 
 export default function Meanings(props) {
   return (
-    <div className="Meanings">
+    <section className="Meanings">
       <h3>{props.meanings.partOfSpeech}</h3>
       {props.meanings.definitions.map(function (definition, index) {
         return (
@@ -16,6 +16,6 @@ export default function Meanings(props) {
           </div>
         );
       })}
-    </div>
+    </section>
   );
 }

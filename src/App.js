@@ -8,7 +8,7 @@ export default function App() {
       <div className="container">
         <h1>Dictionary App</h1>
         <main>
-          <Dictionary />
+          <Dictionary defaultWord="star" />
         </main>
         <footer className="text-center">
           This project was coded by Silvia Cremascoli and is open-sourced on{" "}

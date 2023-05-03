@@ -1,0 +1,17 @@
+.Synonyms li {
+  display: inline-block;
+  list-style: none;
+  padding-right: 10px;
+  line-height: 1;
+  font-size: 14px;
+}
+
+.Synonyms {
+  padding: 0;
+  margin: 10px 0;
+}
+
+.Synonyms p {
+  display: inline;
+  font-weight: bold;
+}

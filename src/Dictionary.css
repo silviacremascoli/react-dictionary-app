@@ -1,20 +1,33 @@
-.Dictionary .SearchResult {
-  background: rgba(255, 255, 255, 0.4);
+.Dictionary section {
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
-  padding: 20px;
-  margin: 0 60px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 30px;
+  margin: 20px 120px;
+}
+
+.Dictionary h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .Dictionary input {
-  width: 400px;
-  display: block;
+  max-width: 400px;
+  padding: 6px;
+  color: #333;
   margin: 0 auto;
+  text-align: center;
 }
 
-.Dictionary .Example {
-  font-size: 14px;
+.Dictionary .hint {
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: center;
 }
 
-.Dictionary .Example::first-letter {
-  text-transform: capitalize;
+@media (max-width: 992px) {
+  .Dictionary section {
+    margin: 20px 10px;
+  }
 }

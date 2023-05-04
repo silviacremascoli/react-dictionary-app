@@ -4,7 +4,6 @@ import Phonetics from "./Phonetics";
 import "./SearchResult.css";
 
 export default function SearchResult(props) {
-  console.log(props.data);
   if (props.data) {
     return (
       <div className="SearchResult text-center">

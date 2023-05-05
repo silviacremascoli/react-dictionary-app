@@ -60,7 +60,7 @@ export default function Dictionary(props) {
           </div>
         </section>
         <SearchResult data={data} />
-        <Photos photos={photos} />
+        {photos?.length > 0 && <Photos photos={photos} />}
       </div>
     );
   } else {

@@ -10,37 +10,33 @@ export default function Dictionary(props) {
   let [photos, setPhotos] = useState(null);
   let [loaded, setLoaded] = useState(false);
 
-  function handleResponse(response) {
-    setData(response.data[0]);
-  }
-
-  function handleImagesResponse(response) {
-    setPhotos(response.data.photos);
-  }
-
-  function search() {
+  const search = () => {
     // https://dictionaryapi.dev/
     let apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${keyword}`;
-    axios.get(apiUrl).then(handleResponse);
+    axios.get(apiUrl).then((response) => {
+      setData(response.data[0]);
+    });
     // https://www.shecodes.io/learn/apis/images
     let imagesApiKey = "372b3246a78f090c2oeea103eb8344t0";
     let imagesApiUrl = `https://api.shecodes.io/images/v1/search?query=${keyword}&key=${imagesApiKey}`;
-    axios.get(imagesApiUrl).then(handleImagesResponse);
-  }
+    axios.get(imagesApiUrl).then((response) => {
+      setPhotos(response.data.photos);
+    });
+  };
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
     search();
-  }
+  };
 
-  function getKeyword(event) {
+  const getKeyword = (event) => {
     setKeyword(event.target.value);
-  }
+  };
 
-  function load() {
+  const load = () => {
     setLoaded(true);
     search();
-  }
+  };
 
   if (loaded) {
     return (

@@ -2,3 +2,7 @@
   font-size: 34px;
   margin-bottom: 10px;
 }
+
+.SearchResult .definition-source {
+  font-size: 12px;
+}

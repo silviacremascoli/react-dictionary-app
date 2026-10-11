@@ -26,6 +26,7 @@ export default function SearchResult(props) {
               href={`https://en.wiktionary.org/wiki/${encodeURIComponent(props.data.word)}`}
               target="_blank"
               rel="noreferrer"
+              aria-label={`${props.data.word} on Wiktionary (opens in a new tab)`}
             >
               Wiktionary
             </a>{" "}
@@ -34,6 +35,7 @@ export default function SearchResult(props) {
               href="https://creativecommons.org/licenses/by-sa/4.0/"
               target="_blank"
               rel="noreferrer"
+              aria-label="Creative Commons Attribution-ShareAlike license (opens in a new tab)"
             >
               CC BY-SA
             </a>.

@@ -53,6 +53,7 @@ export default function Dictionary(props) {
   let [keyword, setKeyword] = useState(props.defaultWord);
   let [data, setData] = useState(null);
   let [phonetics, setPhonetics] = useState(null);
+  let [searchStatus, setSearchStatus] = useState("");
   let [error, setError] = useState(null);
   let [photos, setPhotos] = useState(null);
   let [loaded, setLoaded] = useState(false);
@@ -65,6 +66,7 @@ export default function Dictionary(props) {
     const requestId = ++searchIdRef.current;
     setData(null);
     setPhonetics(null);
+    setSearchStatus(`Searching definitions for ${searchedWord}.`);
     setError(null);
     setPhotos(null);
 
@@ -132,11 +134,14 @@ export default function Dictionary(props) {
             meanings,
             source: "wiktionary",
           });
+          setSearchStatus(`Definitions loaded for ${searchedWord}.`);
         } else {
+          setSearchStatus("");
           setError("No English definitions were found for that word.");
         }
       })
       .catch(() => {
+        if (requestId === searchIdRef.current) setSearchStatus("");
         setError("Definitions are unavailable right now. Please try again later.");
       });
 
@@ -179,24 +184,32 @@ export default function Dictionary(props) {
         <section>
           <h2>Which word would you like to look up?</h2>
           <form onSubmit={handleSubmit}>
+            <label className="visually-hidden" htmlFor="word-search">
+              Search for an English word
+            </label>
             <input
+              id="word-search"
               type="search"
               className="form-control"
               defaultValue={props.defaultWord}
+              aria-describedby="search-hint"
               onChange={getKeyword}
             />
           </form>
-          <div className="hint">
+          <div className="hint" id="search-hint">
             Try: pumpkin, queer, deforestation or any other word! 😀{" "}
           </div>
         </section>
+        <p className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+          {searchStatus}
+        </p>
         <SearchResult data={data} phonetics={phonetics} />
         {error && <p className="dictionary-error" role="alert">{error}</p>}
-        {photos?.length > 0 && <Photos photos={photos} />}
+        {photos?.length > 0 && <Photos photos={photos} word={data?.word || keyword} />}
       </div>
     );
   }
 
   load();
-  return <p>Loading...</p>;
+  return <p role="status">Loading...</p>;
 }

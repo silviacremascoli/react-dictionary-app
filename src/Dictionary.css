@@ -26,6 +26,12 @@
   text-align: center;
 }
 
+.Dictionary .dictionary-error {
+  color: #b42318;
+  margin: 16px;
+  text-align: center;
+}
+
 @media (max-width: 576px) {
   .Dictionary section {
     margin: 20px 10px;

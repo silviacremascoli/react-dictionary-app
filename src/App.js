@@ -11,11 +11,15 @@ export default function App() {
           <Dictionary defaultWord="star" />
         </main>
         <footer className="text-center">
-          This project was coded by Silvia Cremascoli and is open-sourced on{" "}
+          This project was coded by{" "}
+          <a href="https:www.silviacremascoli.com">
+            Silvia Cremascoli
+          </a>
+          {" "}and is open-sourced on{" "}
           <a href="https://github.com/silviacremascoli/react-dictionary-app">
             GitHub
           </a>
-          🚀
+          {" "}<span aria-hidden="true">🚀</span>
         </footer>
       </div>
     </div>

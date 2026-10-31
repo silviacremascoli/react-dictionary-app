@@ -1,4 +1,40 @@
+:root {
+  --color-page-start: #c1dfc4;
+  --color-page-end: #deecdd;
+  --color-surface: rgba(255, 255, 255, 0.76);
+
+  --color-text: #333;
+  --color-text-muted: #666;
+  --color-border: rgba(44, 64, 48, 0.12);
+  --color-divider: rgba(0, 0, 0, 0.2);
+
+  --color-accent: #198754;
+  --color-danger: #b42318;
+
+  --shadow-panel: 0 2px 8px rgba(44, 64, 48, 0.1);
+  --radius-panel: 8px;
+
+  --color-focus: #0047ab;
+}
+
 body {
-  background: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
+  background: linear-gradient(
+    to top,
+    var(--color-page-start),
+    var(--color-page-end)
+    100%
+  );
   background-attachment: fixed;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-panel);
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
 }

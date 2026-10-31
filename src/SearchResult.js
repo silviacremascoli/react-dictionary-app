@@ -10,6 +10,14 @@ export default function SearchResult(props) {
       <div className="SearchResult text-center">
         <section>
           <h2>{props.data.word}</h2>
+          <button
+            type="button"
+            className="btn btn-outline-success mb-3"
+            onClick={() => { props.onSaveWord(props.data); props.onSaved(props.data.word); }}
+            disabled={props.isSaved}
+          >
+            {props.isSaved ? "Saved" : "Save word"}
+          </button>
           {phonetics && <Phonetics phonetics={phonetics} />}
         </section>
         {props.data.meanings.map(function (meaning, index) {

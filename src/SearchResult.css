@@ -1,8 +1,15 @@
-.SearchResult h2 {
-  font-size: 34px;
-  margin-bottom: 10px;
-}
+.SearchResult {
+  h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+  }
+  .definition-source {
+    font-size: 12px;
+  }
 
-.SearchResult .definition-source {
-  font-size: 12px;
+  @media (max-width: 992px) {
+    h2 {
+      font-size: 28px;
+    }
+  }
 }

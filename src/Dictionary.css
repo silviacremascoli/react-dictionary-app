@@ -1,35 +1,81 @@
-.Dictionary section {
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  padding: 30px;
-  margin: 20px;
+.Dictionary-layout {
+  color: var(--color-text);
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.9fr);
+  gap: 28px;
+  align-items: start;
+
+  section {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-panel);
+    padding: 24px;
+    margin: 0 0 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .hint {
+    font-size: 12px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .dictionary-error {
+    color: var(--color-danger);
+    margin: 16px;
+    text-align: center;
+  }
+
+  .Dictionary-search {
+    max-width: 520px;
+    margin: 0 auto;
+
+    input {
+      max-width: none;
+      margin: 0;
+      text-align: center;
+      font-size: 18px;
+      border-radius: var(--radius-panel);
+    }
+  }
 }
 
-.Dictionary h2 {
-  font-size: 22px;
-  margin-bottom: 20px;
-  text-align: center;
+.Dictionary-primary {
+  min-width: 0;
 }
 
-.Dictionary input {
-  max-width: 400px;
-  padding: 10px;
-  color: #333;
-  margin: 0 auto;
-  text-align: center;
+.Dictionary-layout>.Dictionary-primary>section,
+.Dictionary-sidebar>.VocabularyNotebook {
+  margin: 0 0 20px;
 }
 
-.Dictionary .hint {
-  font-size: 12px;
-  margin-top: 10px;
-  text-align: center;
+.Dictionary-sidebar {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+
+  .StartSession {
+    display: block;
+    margin: 0 auto 20px auto;
+  }
 }
 
-.Dictionary .dictionary-error {
-  color: #b42318;
-  margin: 16px;
-  text-align: center;
+@media (max-width: 992px) {
+  .Dictionary-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .Dictionary-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 576px) {

@@ -1,124 +1,85 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Merriam-Webster Pronunciation Setup
-
-The React app requests pronunciation data from a small local Express proxy so the Merriam-Webster API key is not included in the browser bundle.
-
-1. Get a Merriam-Webster Collegiate API key from [dictionaryapi.com](https://dictionaryapi.com/).
-2. Create `.env` file and set `MW_API_KEY` to your key.
-3. Run `npm run server` in one terminal.
-4. Run `npm start` in a second terminal.
-
-The `.env` file is ignored by Git. In production, deploy the Express endpoint and React app behind the same origin, and configure `MW_API_KEY` as a server environment variable.
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
 # React Dictionary App
 
-A React dictionary for looking up English words, with definitions, pronunciation audio, and related images. The app was created by [Silvia Cremascoli](https://github.com/silviacremascoli/react-dictionary-app).
+A responsive React dictionary and vocabulary notebook for looking up English words, exploring definitions, audio pronunciations, synonyms, related imagery, and reviewing saved words through spaced-repetition study sessions.
+
+Created by [Silvia Cremascoli](https://www.silviacremascoli.com).
 
 ## Features
 
-- Search for an English word; the app opens with `star` as its initial search.
-- Browse definitions grouped by part of speech, with up to five definitions per group.
-- Hear pronunciation audio and view Merriam-Webster's pronunciation respelling when available.
-- View example sentences and related photos when the APIs provide them.
-- Read definitions from Wiktionary, with source and license attribution displayed in the app.
+- **Dictionary Search:** Search English words with immediate definition display and curated suggestions.
+- **Wiktionary Definitions & Examples:** Definitions grouped by part of speech, with nested examples and source/license attribution.
+- **Synonyms:** Best-effort synonym extraction from Wiktionary sections, presented cleanly with inline dividers.
+- **Pronunciation Audio & Respelling:** Audio pronunciation and Merriam-Webster respellings served through a secure backend proxy.
+- **Curated Photos:** Responsive image gallery related to the searched term via SheCodes Images API.
+- **Personal Vocabulary Notebook:** Save words along with their definition, part of speech, and personal notes directly to local storage.
+- **Spaced-Repetition Study Sessions:** Interactive flashcard study mode with randomized card queues, answer reveal, self-rating ("Got it" / "Again"), session progress tracking, and scheduled review intervals.
+- **Desktop Two-Column Layout:** Sticky sidebar notebook alongside primary search results on larger viewports, cleanly collapsing into a stacked mobile layout.
+- **Accessible Design:** Visible keyboard focus styles, accessible form landmarks, screen-reader live region announcements for search results, saved words, and study card progress.
 
-## Data Sources
+## Data Sources & Backend Architecture
 
-- [Wiktionary REST API](https://en.wiktionary.org/api/rest_v1/): English definitions and examples. Wiktionary content is available under [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
-- [Merriam-Webster Collegiate API](https://dictionaryapi.com/products/api-collegiate-dictionary): pronunciation respellings and audio. A key with access to the Collegiate reference is required.
-- [SheCodes Images API](https://www.shecodes.io/learn/apis/images): related photos.
+- [Wiktionary REST API & Action API](https://en.wiktionary.org/): English definitions, examples, and synonyms. Licensed under [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/).
+- [Merriam-Webster Collegiate API](https://dictionaryapi.com/products/api-collegiate-dictionary): Pronunciation respellings and audio recordings.
+- [SheCodes Images API](https://www.shecodes.io/learn/apis/images): Curated context imagery.
+
+### Secure Proxy Architecture
+
+To keep API keys protected from browser inspection:
+- **Local Development:** A lightweight Express server ([server.js](server.js)) proxies pronunciation (`/api/pronunciation`) and image (`/api/images`) lookups on port `5050`, reading secrets securely from `.env`.
+- **Production (Netlify):** Serverless functions ([netlify/functions/pronunciation.js](netlify/functions/pronunciation.js) and [netlify/functions/images.js](netlify/functions/images.js)) handle requests via redirects configured in [netlify.toml](netlify.toml).
+- Shared Merriam-Webster parsing logic is centralized in [src/lib/pronunciation.js](src/lib/pronunciation.js) to keep local and production behavior consistent.
 
 ## Run Locally
 
-Prerequisites: Node.js and npm.
+### Prerequisites
+- Node.js (v16+ recommended) and npm.
 
-1. Install dependencies:
+### Setup
 
-	```bash
-	npm install
-	```
+1. Clone repository and install dependencies:
 
-2. Get a Merriam-Webster Collegiate API key and copy `.env.example` to `.env`:
+   ```bash
+   git clone https://github.com/silviacremascoli/react-dictionary-app.git
+   cd react-dictionary-app
+   npm install
+   ```
 
-	```bash
-	cp .env.example .env
-	```
+2. Configure environment variables:
 
-	Set `MW_API_KEY` in `.env` to your key. The `.env` file is ignored by Git; never commit your key.
+   ```bash
+   cp .env.example .env
+   ```
 
-3. Start the pronunciation proxy in one terminal:
+   Add your credentials in `.env`:
+   - `MW_API_KEY`: Merriam-Webster Collegiate Dictionary API key (from [dictionaryapi.com](https://dictionaryapi.com/)).
+   - `SHE_CODES_IMAGES_API_KEY`: SheCodes Images API key.
 
-	```bash
-	npm run server
-	```
+   *(Note: `.env` is ignored by Git; never commit API keys to source control).*
 
-4. Start the React app in another terminal:
+3. Start the API proxy server in one terminal:
 
-	```bash
-	npm start
-	```
+   ```bash
+   npm run server
+   ```
 
-	Open [http://localhost:3000](http://localhost:3000). If that port is in use, Create React App will offer another one. The local Express proxy listens on port `5050`.
+4. Start the React frontend in another terminal:
 
-## Scripts
+   ```bash
+   npm start
+   ```
 
-- `npm start`: run the React development server.
-- `npm run server`: run the Express pronunciation proxy.
-- `npm test`: run the Create React App test runner.
-- `npm run build`: create a production build in `build/`.
+   Open [http://localhost:3000](http://localhost:3000) in your browser. The React dev server automatically proxies `/api/*` calls to the Express server running on port `5050`.
 
-For deployment, host the Express proxy and React app behind the same origin, and provide `MW_API_KEY` as a server environment variable.
+## Available Scripts
+
+- `npm start`: Runs the React app in development mode on port 3000.
+- `npm run server`: Runs the backend Express proxy on port 5050.
+- `npm run build`: Builds the production bundle to the `build/` folder.
+
+## Deployment
+
+In production (e.g., Netlify):
+- The build command is `npm run build` with publish directory `build`.
+- Configure `MW_API_KEY` and `SHE_CODES_IMAGES_API_KEY` in your hosting platform's environment variables dashboard.
+- Rewrites in [netlify.toml](netlify.toml) route `/api/pronunciation` and `/api/images` to their respective serverless functions.
+

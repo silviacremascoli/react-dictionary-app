@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const axios = require("axios");
 const express = require("express");
+const { parseMwPronunciation } = require("./src/lib/pronunciation");
 
 const app = express();
 
@@ -20,36 +21,36 @@ app.get("/api/pronunciation", async (request, response) => {
     const { data } = await axios.get(apiUrl, {
       params: { key: process.env.MW_API_KEY },
     });
-    const entry = Array.isArray(data)
-      ? data.find((item) => item && typeof item === "object" && item.hwi?.prs?.length)
-      : null;
-    const pronunciation = entry?.hwi.prs.find((item) => item.mw || item.sound?.audio);
-
-    if (!pronunciation) return response.json(null);
-
-    const audio = pronunciation.sound?.audio;
-    const audioDirectory = audio
-      ? audio.startsWith("bix")
-        ? "bix"
-        : audio.startsWith("gg")
-          ? "gg"
-          : /^[0-9_]/.test(audio)
-            ? "number"
-            : audio[0].toLowerCase()
-      : null;
-
-    return response.json({
-      text: pronunciation.mw || "",
-      audio: audio
-        ? `https://media.merriam-webster.com/audio/prons/en/us/mp3/${audioDirectory}/${encodeURIComponent(audio)}.mp3`
-        : "",
-    });
+    const result = parseMwPronunciation(data);
+    return response.json(result);
   } catch {
     return response.status(502).json({ error: "Pronunciation lookup failed." });
   }
 });
 
+
+app.get("/api/images", async (request, response) => {
+  const query = String(request.query.query || "").trim();
+  if (!query) {
+    return response.status(400).json({ error: "A query is required." });
+  }
+
+  const apiKey = String(process.env.SHE_CODES_IMAGES_API_KEY || "");
+  if (!apiKey) {
+    return response.status(503).json({ error: "SheCodes Images API key is not configured." });
+  }
+
+  try {
+    const apiUrl = `https://api.shecodes.io/images/v1/search?query=${encodeURIComponent(query)}&key=${apiKey}`;
+    const { data } = await axios.get(apiUrl);
+
+    return response.json(data);
+  } catch (error) {
+    return response.status(502).json({ error: "Images lookup failed." });
+  }
+});
+
 const port = process.env.PORT || 5050;
 app.listen(port, () => {
-  console.log(`Pronunciation API proxy listening on port ${port}`);
+  console.log(`API proxy listening on port ${port}`);
 });

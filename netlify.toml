@@ -7,3 +7,8 @@
   from = "/api/pronunciation"
   to = "/.netlify/functions/pronunciation"
   status = 200
+
+[[redirects]]
+  from = "/api/images"
+  to = "/.netlify/functions/images"
+  status = 200

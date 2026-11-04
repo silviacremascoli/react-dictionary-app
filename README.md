@@ -70,10 +70,30 @@ To keep API keys protected from browser inspection:
 
    Open [http://localhost:3000](http://localhost:3000) in your browser. The React dev server automatically proxies `/api/*` calls to the Express server running on port `5050`.
 
+## Testing
+
+Run unit and integration tests using Jest and React Testing Library:
+
+```bash
+npm test
+```
+
+To run all tests once without watch mode:
+
+```bash
+npm test --watchAll=false
+```
+
+Test coverage includes:
+
+- Dictionary.test.js: Wiktionary definition extraction, synonym TOC section parsing, localStorage search persistence, and saving/deleting specific definitions without colliding on duplicate words.
+
+
 ## Available Scripts
 
 - `npm start`: Runs the React app in development mode on port 3000.
 - `npm run server`: Runs the backend Express proxy on port 5050.
+- `npm test`: Runs the automated test suite with Jest and React Testing Library in interactive watch mode.
 - `npm run build`: Builds the production bundle to the `build/` folder.
 
 ## Deployment

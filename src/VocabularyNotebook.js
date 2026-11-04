@@ -72,7 +72,7 @@ export default function VocabularyNotebook({
         if (!currentCard) return;
         const nextIndex = sessionIndex + 1;
 
-        onReviewWord(currentCard.word, remembered);
+        onReviewWord(currentCard.id || currentCard.word, remembered);
         setSessionStats((stats) => ({
             reviewed: stats.reviewed + 1,
             remembered: stats.remembered + (remembered ? 1 : 0),
@@ -176,7 +176,7 @@ export default function VocabularyNotebook({
                         const noteId = `vocabulary-note-${index}`;
 
                         return (
-                            <li className="VocabularyNotebook-item" key={item.word.toLowerCase()}>
+                            <li className="VocabularyNotebook-item" key={`${item.word}-${item.partOfSpeech}-${index}`}>
                                 <div className="VocabularyNotebook-word">
                                     <div className="VocabularyNotebook-wordDetails">
                                         <h3>{item.word}</h3>
@@ -190,8 +190,8 @@ export default function VocabularyNotebook({
                                     <button
                                         type="button"
                                         className="btn btn-outline-danger btn-sm"
-                                        onClick={() => onRemove(item.word)}
-                                        aria-label={`Remove ${item.word} from your notebook`}
+                                        onClick={() => onRemove(item.id || item.word)}
+                                        aria-label={`Remove this definition of ${item.word} from your notebook`}
                                     >
                                         Delete word
                                     </button>
@@ -208,7 +208,7 @@ export default function VocabularyNotebook({
                                     rows="2"
                                     value={item.note || ""}
                                     placeholder={`Add a note about "${item.word}"`}
-                                    onChange={(event) => onNoteChange(item.word, event.target.value)}
+                                    onChange={(event) => onNoteChange(item.id || item.word, event.target.value)}
                                 />
                             </li>
                         );

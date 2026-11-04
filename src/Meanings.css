@@ -1,25 +1,47 @@
 .Meanings {
-  .definition {
-  border-bottom: 1px solid var(--color-divider);
-  padding: 15px;
-  margin: 0 100px;
-    
+  .definition-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 30px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--color-divider);
+    text-align: left;
+
     &:last-child {
       border-bottom: none;
-      padding: 15px;
-      margin: 0 100px;
     }
+  }
+
+  .definition-body {
+    min-width: 0;
+  }
+
+  .definition-text {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .definition-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .definition-save-btn {
+    min-width: 68px;
+    white-space: nowrap;
   }
 }
 
-@media (max-width: 992px) {
-  .Meanings .definition {
-    margin: 0;
+@media (max-width: 576px) {
+  .Meanings .definition-row {
+    grid-template-columns: 1fr;
+    padding: 14px 10px;
+    gap: 12px;
+  }
 
-    &:last-child {
-      border-bottom: none;
-      padding: 15px;
-      margin: 0px 20px;
-    }
+  .Meanings .definition-action {
+    justify-content: flex-end;
   }
 }

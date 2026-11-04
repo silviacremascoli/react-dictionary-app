@@ -20,10 +20,30 @@ const readSavedWords = () => {
   }
 };
 
+const LAST_SEARCHED_WORD_STORAGE_KEY = "dictionary-last-searched-word";
+
+const readLastSearchedWord = (fallbackWord = "") => {
+  try {
+    const saved = localStorage.getItem(LAST_SEARCHED_WORD_STORAGE_KEY);
+    return saved && saved.trim() ? saved.trim() : fallbackWord;
+  } catch {
+    return fallbackWord;
+  }
+};
+
+const saveLastSearchedWord = (word = "") => {
+  try {
+    const trimmed = (word || "").trim();
+    if (trimmed) {
+      localStorage.setItem(LAST_SEARCHED_WORD_STORAGE_KEY, trimmed);
+    }
+  } catch {}
+};
+
 const MAX_DEFINITIONS_PER_PART_OF_SPEECH = 5;
 const parseDefinitionHTML = (value = "") => {
   const parsed = new DOMParser().parseFromString(value, "text/html");
-  parsed.querySelectorAll("style, script, link").forEach((element) =>
+  parsed.querySelectorAll("style, script, link, .maintenance-line").forEach((element) =>
     element.remove()
   );
   return parsed;
@@ -177,7 +197,8 @@ const selectMeaningForNotebook = (meanings = []) => {
 };
 
 export default function Dictionary(props) {
-  let [keyword, setKeyword] = useState(props.defaultWord);
+   const [initialWord] = useState(() => readLastSearchedWord(props.defaultWord));
+  let [keyword, setKeyword] = useState(initialWord);
   let [data, setData] = useState(null);
   let [phonetics, setPhonetics] = useState(null);
   let [searchStatus, setSearchStatus] = useState("");
@@ -185,10 +206,6 @@ export default function Dictionary(props) {
   let [photos, setPhotos] = useState(null);
   const searchIdRef = useRef(0);
   const [saveAnnouncement, setSaveAnnouncement] = useState("");
-
-  const announceSavedWord = (word) => {
-    setSaveAnnouncement(`${word} saved to your vocabulary notebook.`);
-  };
 
   const search = (wordToSearch) => {
     const searchedWord = wordToSearch.trim();
@@ -311,13 +328,14 @@ export default function Dictionary(props) {
   };
 
   useEffect(() => {
-    if (props.defaultWord) {
-      search(props.defaultWord);
+    if (initialWord) {
+      search(initialWord);
     }
-  }, [props.defaultWord]);
+  }, [initialWord]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    saveLastSearchedWord(keyword);
     search(keyword);
   };
 
@@ -331,23 +349,25 @@ export default function Dictionary(props) {
     localStorage.setItem("dictionary-notebook", JSON.stringify(savedWords));
   }, [savedWords]);
 
-  const saveWord = (entry) => {
-    const meaning = selectMeaningForNotebook(entry.meanings);
-    const definition = meaning?.definitions[0]?.definition || "";
-
+    const saveDefinition = ({ word, partOfSpeech, definition }) => {
     setSavedWords((current) => {
-      if (current.some((item) =>
-        item.word.toLowerCase() === entry.word.toLowerCase()
-      )) {
+      if (
+        current.some(
+          (item) =>
+            item.word.toLowerCase() === word.toLowerCase() &&
+            item.definition === definition
+        )
+      ) {
         return current;
       }
 
       return [
         ...current,
         {
-          word: entry.word,
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          word,
           definition,
-          partOfSpeech: meaning?.partOfSpeech || "",
+          partOfSpeech: partOfSpeech || "",
           note: "",
           addedAt: Date.now(),
           reviewLevel: 0,
@@ -355,12 +375,19 @@ export default function Dictionary(props) {
         },
       ];
     });
+
+    announceSavedWord(`${word} (${partOfSpeech}) saved to your vocabulary notebook.`);
   };
 
-  const reviewWord = (word, remembered) => {
+  const announceSavedWord = (message) => {
+    setSaveAnnouncement(message);
+  };
+
+  const reviewWord = (identifier, remembered) => {
     setSavedWords((current) =>
       current.map((item) => {
-        if (item.word.toLowerCase() !== word.toLowerCase()) return item;
+        const matches = item.id ? item.id === identifier : item.word.toLowerCase() === identifier.toLowerCase();
+        if (!matches) return item;
 
         const nextLevel = remembered
           ? Math.min((item.reviewLevel || 0) + 1, REVIEW_INTERVALS_DAYS.length)
@@ -379,16 +406,16 @@ export default function Dictionary(props) {
     );
   };
 
-  const removeSavedWord = (word) => {
+  const removeSavedWord = (identifier) => {
     setSavedWords((current) =>
-      current.filter((item) => item.word.toLowerCase() !== word.toLowerCase())
+      current.filter((item) => (item.id ? item.id !== identifier : item.word.toLowerCase() !== identifier.toLowerCase()))
     );
   };
 
-  const updateSavedNote = (word, note) => {
+  const updateSavedNote = (identifier, note) => {
     setSavedWords((current) =>
       current.map((item) =>
-        item.word.toLowerCase() === word.toLowerCase()
+        (item.id ? item.id === identifier : item.word.toLowerCase() === identifier.toLowerCase())
           ? { ...item, note }
           : item
       )
@@ -409,7 +436,7 @@ export default function Dictionary(props) {
                 id="word-search"
                 type="search"
                 className="form-control"
-                defaultValue={props.defaultWord}
+                defaultValue={initialWord}
                 aria-describedby="search-hint"
                 onChange={getKeyword}
               />
@@ -436,9 +463,8 @@ export default function Dictionary(props) {
         <SearchResult
           data={data}
           phonetics={phonetics}
-          onSaveWord={saveWord}
-          onSaved={announceSavedWord}
-          isSaved={savedWords.some((item) => item.word.toLowerCase() === data?.word.toLowerCase())}
+          savedWords={savedWords}
+          onSaveDefinition={saveDefinition}
         />
         {error && <p className="dictionary-error" role="alert">{error}</p>}
         {photos?.length > 0 && <Photos photos={photos} word={data?.word || keyword} />}
@@ -468,4 +494,7 @@ export {
   REVIEW_INTERVALS_DAYS,
   isProperNoun,
   selectMeaningForNotebook,
+  LAST_SEARCHED_WORD_STORAGE_KEY,
+  readLastSearchedWord,
+  saveLastSearchedWord,
 };

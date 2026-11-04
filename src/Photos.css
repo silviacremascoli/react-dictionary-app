@@ -1,21 +1,31 @@
 .Photos {
-  a {
-    display: block;
-    border-radius: var(--radius-panel);
-
-    img {
-      display: block;
-      width: 100%;
-      border-radius: inherit;
-    }
+  .row {
+    padding: 0 12px;
   }
 
   .col-md-4 {
     padding: 8px;
   }
 
-  .row {
-    padding: 0 12px;
+  a {
+    display: block;
+    border-radius: var(--radius-panel);
+    overflow: hidden;
+    box-shadow: var(--shadow-panel);
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: center;
+      border-radius: inherit;
+      transition: transform 200ms ease-in-out;
+    }
+
+    &:hover img {
+      transform: scale(1.04);
+    }
   }
 }
 

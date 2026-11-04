@@ -11,6 +11,11 @@ export default function Photos(props) {
               typeof photo.alt === "string" && photo.alt.trim()
                 ? photo.alt.trim()
                 : `Photo related to ${props.word || "this word"}`;
+
+            const imageSrc = photo.src.original
+              ? `${photo.src.original}?auto=compress&cs=tinysrgb&w=800`
+              : photo.src.landscape;
+
             return (
               <div className="col-md-4" key={index}>
                 <a
@@ -20,7 +25,7 @@ export default function Photos(props) {
                   aria-label={`View photo: ${description} (opens in a new tab)`}
                 >
                   <img
-                    src={photo.src.landscape}
+                    src={imageSrc}
                     alt={description}
                     className="img-fluid"
                   />

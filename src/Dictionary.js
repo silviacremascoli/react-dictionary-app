@@ -160,6 +160,22 @@ const fetchSynonymsForMeanings = async (word, meanings) => {
   }
 };
 
+const isProperNoun = (partOfSpeech = "") =>
+  partOfSpeech.trim().toLowerCase() === "proper noun";
+
+const selectMeaningForNotebook = (meanings = []) => {
+  const withDefinitions = (meanings || []).filter(
+    (meaning) => Array.isArray(meaning?.definitions) && meaning.definitions.length > 0
+  );
+  if (!withDefinitions.length) return null;
+
+  const commonMeaning = withDefinitions.find(
+    (meaning) => !isProperNoun(meaning.partOfSpeech)
+  );
+
+  return commonMeaning || withDefinitions[0];
+};
+
 export default function Dictionary(props) {
   let [keyword, setKeyword] = useState(props.defaultWord);
   let [data, setData] = useState(null);
@@ -316,7 +332,7 @@ export default function Dictionary(props) {
   }, [savedWords]);
 
   const saveWord = (entry) => {
-    const meaning = entry.meanings.find((item) => item.definitions.length);
+    const meaning = selectMeaningForNotebook(entry.meanings);
     const definition = meaning?.definitions[0]?.definition || "";
 
     setSavedWords((current) => {
@@ -450,4 +466,6 @@ export {
   fetchSynonymsForMeanings,
   readSavedWords,
   REVIEW_INTERVALS_DAYS,
+  isProperNoun,
+  selectMeaningForNotebook,
 };

@@ -24,6 +24,11 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5050",
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "<rootDir>/node_modules/axios/dist/node/axios.cjs"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

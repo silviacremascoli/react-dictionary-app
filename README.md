@@ -11,10 +11,10 @@ Created by [Silvia Cremascoli](https://www.silviacremascoli.com).
 - **Synonyms:** Best-effort synonym extraction from Wiktionary sections, presented cleanly with inline dividers.
 - **Pronunciation Audio & Respelling:** Audio pronunciation and Merriam-Webster respellings served through a secure backend proxy.
 - **Curated Photos:** Responsive image gallery related to the searched term via SheCodes Images API.
-- **Personal Vocabulary Notebook:** Save words along with their definition, part of speech, and personal notes directly to local storage.
+- **Personal Vocabulary Notebook:** Save specific definitions alongside their part of speech and personal notes directly to local storage, supporting multiple saved definitions per word.
 - **Spaced-Repetition Study Sessions:** Interactive flashcard study mode with randomized card queues, answer reveal, self-rating ("Got it" / "Again"), session progress tracking, and scheduled review intervals.
 - **Desktop Two-Column Layout:** Sticky sidebar notebook alongside primary search results on larger viewports, cleanly collapsing into a stacked mobile layout.
-- **Accessible Design:** Visible keyboard focus styles, accessible form landmarks, screen-reader live region announcements for search results, saved words, and study card progress.
+- **Accessible Design:** Visible keyboard focus styles, accessible form landmarks, screen-reader live region announcements for search results and study sessions, and contextual aria-label attributes on per-definition save/delete buttons.
 
 ## Data Sources & Backend Architecture
 
